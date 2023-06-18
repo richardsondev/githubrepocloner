@@ -17,9 +17,9 @@ githubrepocloner <organization> <clone_folder> <days_last_updated>
 ```
 
 Where:
-- <organization> is the name of the GitHub organization whose repositories you want to clone.
-- <clone_folder> is the path to the local directory where the repositories will be cloned.
-- <days_last_updated> is the number of days since the repository was last updated (repositories updated more recently than this will be cloned).
+- `<organization>` is the name of the GitHub organization whose repositories you want to clone.
+- `<clone_folder>` is the path to the local directory where the repositories will be cloned.
+- `<days_last_updated>` is the number of days since the repository was last updated (repositories updated more recently than this will be cloned).
 
 For example, to clone all Microsoft repositories updated within a year into `/mnt/external`, you'd run:
 
