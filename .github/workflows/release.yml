@@ -58,7 +58,7 @@ jobs:
     steps:
       # Get the machine ready to build
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
@@ -89,7 +89,7 @@ jobs:
       - name: Build
         run: cargo build --release --target ${{ matrix.target.rustTarget }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: githubrepocloner-${{ matrix.target.rustTarget }}${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }}
           path: ./target/${{ matrix.target.rustTarget }}/release/githubrepocloner${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }}
