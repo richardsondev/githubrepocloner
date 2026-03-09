@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d333b"/>
+      <stop offset="100%" style="stop-color:#1c2128"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#58a6ff"/>
+      <stop offset="100%" style="stop-color:#1f6feb"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3fb950"/>
+      <stop offset="100%" style="stop-color:#238636"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded background -->
+  <rect x="4" y="4" width="120" height="120" rx="24" ry="24" fill="url(#bg)" stroke="#444c56" stroke-width="1.5"/>
+
+  <!-- Left repo bracket -->
+  <g transform="translate(20, 28)">
+    <!-- Repo file icon -->
+    <rect x="0" y="0" width="36" height="46" rx="4" ry="4" fill="none" stroke="url(#accent)" stroke-width="3"/>
+    <path d="M10,0 L10,12 L22,12" fill="none" stroke="url(#accent)" stroke-width="2" stroke-linecap="round"/>
+    <!-- Code lines -->
+    <line x1="8" y1="22" x2="22" y2="22" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+    <line x1="8" y1="29" x2="28" y2="29" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+    <line x1="8" y1="36" x2="18" y2="36" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+  </g>
+
+  <!-- Clone arrow (center) -->
+  <g transform="translate(64, 44)">
+    <!-- Arrow shaft -->
+    <line x1="0" y1="-8" x2="0" y2="18" stroke="url(#arrow)" stroke-width="4" stroke-linecap="round"/>
+    <!-- Arrow head -->
+    <polyline points="-9,9 0,20 9,9" fill="none" stroke="url(#arrow)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Second arrow (clone/duplicate effect) -->
+    <line x1="0" y1="-20" x2="0" y2="-12" stroke="#3fb950" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+  </g>
+
+  <!-- Right repo bracket (the clone) -->
+  <g transform="translate(72, 38)">
+    <rect x="0" y="0" width="36" height="46" rx="4" ry="4" fill="none" stroke="url(#accent)" stroke-width="3" stroke-dasharray="6,3" opacity="0.6"/>
+    <!-- Code lines -->
+    <line x1="8" y1="16" x2="22" y2="16" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+    <line x1="8" y1="23" x2="28" y2="23" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+    <line x1="8" y1="30" x2="18" y2="30" stroke="#58a6ff" stroke-width="2.5" stroke-linecap="round" opacity="0.2"/>
+  </g>
+
+  <!-- Multiply dots (many repos) -->
+  <g opacity="0.4">
+    <circle cx="80" cy="96" r="2.5" fill="#58a6ff"/>
+    <circle cx="90" cy="96" r="2.5" fill="#58a6ff"/>
+    <circle cx="100" cy="96" r="2.5" fill="#58a6ff"/>
+  </g>
+
+  <!-- GitHub-style branch node at top -->
+  <g transform="translate(34, 20)">
+    <circle cx="0" cy="0" r="4" fill="#3fb950" opacity="0.8"/>
+  </g>
+</svg>
