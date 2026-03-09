@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build and Test
+    name: "Build and Test (${{ matrix.target.displayName }}, ${{ matrix.target.rustTarget }}, ${{ matrix.target.runner }})"
     timeout-minutes: 10
     permissions:
       contents: read
