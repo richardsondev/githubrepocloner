@@ -1,15 +1,19 @@
-name: Release
+name: CI
 
 on:
-  release:
-    types: [released]
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  release:
-    name: "Build and Release (${{ matrix.target.displayName }}, ${{ matrix.target.rustTarget }}, ${{ matrix.target.runner }})"
+  build:
+    name: "Build and Test (${{ matrix.target.displayName }}, ${{ matrix.target.rustTarget }}, ${{ matrix.target.runner }})"
     timeout-minutes: 10
     permissions:
-      contents: write
+      contents: read
     strategy:
       matrix:
         target:
@@ -102,10 +106,3 @@ jobs:
         with:
           name: githubrepocloner-${{ matrix.target.rustTarget }}${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }}
           path: ./target/${{ matrix.target.rustTarget }}/release/githubrepocloner${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }}
-
-      - name: Upload Release Asset
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run:
-          cp ./target/${{ matrix.target.rustTarget }}/release/githubrepocloner${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }} ./githubrepocloner-${{ github.ref_name }}-${{ matrix.target.rustTarget }}${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }} &&
-          gh release upload ${{ github.event.release.tag_name }} ./githubrepocloner-${{ github.ref_name }}-${{ matrix.target.rustTarget }}${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }}#"githubrepocloner-${{ github.ref_name }}-${{ matrix.target.rustTarget }}${{ endsWith(matrix.target.rustTarget, '-windows-gnu') && '.exe' || '' }} (${{ matrix.target.displayName }})"
