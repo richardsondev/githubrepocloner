@@ -40,4 +40,4 @@ winresource = "0.1"
 
 [dev-dependencies]
 mockito = "1.7.0"
-tempfile = "3.23.0"
+tempfile = "3.27.0"
