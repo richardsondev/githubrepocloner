@@ -10,6 +10,24 @@ use std::process::Command;
 use retry::{RetryConfig, RetryableError, retry_with_backoff, check_response_status};
 use repo::Repo;
 
+/// Validate that a repository name contains only safe characters
+/// and cannot be interpreted as a command-line flag by git.
+fn is_valid_repo_name(name: &str) -> bool {
+    !name.is_empty()
+        && !name.starts_with('-')
+        && name.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_' || c == '.')
+}
+
+/// Validate that a branch name contains only safe characters
+/// and cannot be interpreted as a command-line flag by git.
+fn is_valid_branch_name(name: &str) -> bool {
+    !name.is_empty()
+        && !name.starts_with('-')
+        && name
+            .chars()
+            .all(|c| c.is_alphanumeric() || c == '-' || c == '_' || c == '.' || c == '/')
+}
+
 /// Shared context passed through the clone/archive pipeline.
 struct CloneContext<'a> {
     client: &'a reqwest::Client,
@@ -118,6 +136,19 @@ async fn fetch_repo_page(
 
 /// Process a single repository — either clone it or download its archive.
 async fn process_repo(ctx: &CloneContext<'_>, repo: &Repo) {
+    if !is_valid_repo_name(&repo.name) {
+        eprintln!("Skipping repo with invalid name: {}", repo.name);
+        return;
+    }
+
+    if !is_valid_branch_name(&repo.default_branch) {
+        eprintln!(
+            "Skipping repo {} with invalid default branch: {}",
+            repo.name, repo.default_branch
+        );
+        return;
+    }
+
     let repo_path = format!("{}/{}", ctx.clone_folder, repo.name);
     if Path::new(&repo_path).exists() {
         println!("Skipping {}, folder already exists.", repo.name);
@@ -228,5 +259,40 @@ mod tests {
     fn test_client_has_user_agent() {
         let client = create_client(None).unwrap();
         assert_eq!(std::mem::size_of_val(&client), std::mem::size_of::<reqwest::Client>());
+    }
+
+    #[test]
+    fn test_valid_repo_names() {
+        assert!(is_valid_repo_name("my-repo"));
+        assert!(is_valid_repo_name("repo_name"));
+        assert!(is_valid_repo_name("repo.name"));
+        assert!(is_valid_repo_name("Repo123"));
+    }
+
+    #[test]
+    fn test_invalid_repo_names() {
+        assert!(!is_valid_repo_name(""));
+        assert!(!is_valid_repo_name("-flag"));
+        assert!(!is_valid_repo_name("--upload-pack=evil"));
+        assert!(!is_valid_repo_name("repo name"));
+        assert!(!is_valid_repo_name("repo;rm -rf /"));
+        assert!(!is_valid_repo_name("repo$(cmd)"));
+    }
+
+    #[test]
+    fn test_valid_branch_names() {
+        assert!(is_valid_branch_name("main"));
+        assert!(is_valid_branch_name("feature/my-branch"));
+        assert!(is_valid_branch_name("release-1.0"));
+        assert!(is_valid_branch_name("v2.0.1"));
+    }
+
+    #[test]
+    fn test_invalid_branch_names() {
+        assert!(!is_valid_branch_name(""));
+        assert!(!is_valid_branch_name("-flag"));
+        assert!(!is_valid_branch_name("--upload-pack=evil"));
+        assert!(!is_valid_branch_name("branch name"));
+        assert!(!is_valid_branch_name("branch;cmd"));
     }
 }
